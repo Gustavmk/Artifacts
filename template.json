@@ -1,0 +1,309 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_CatalogoDigital_Homolog_name": {
+            "defaultValue": "CatalogoDigital-Homolog",
+            "type": "String"
+        },
+        "serverfarms_homolog_plan2_externalid": {
+            "defaultValue": "/subscriptions/bfb38ea5-2e52-42a4-86a8-b5ff06ef1178/resourceGroups/MvxHom-WebApp/providers/Microsoft.Web/serverfarms/homolog-plan2",
+            "type": "String"
+        },
+        "virtualNetworks_McxDEV_CIDR_externalid": {
+            "defaultValue": "/subscriptions/bfb38ea5-2e52-42a4-86a8-b5ff06ef1178/resourceGroups/DEVTESTE_Microvix/providers/Microsoft.Network/virtualNetworks/McxDEV-CIDR",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('sites_CatalogoDigital_Homolog_name')]",
+            "location": "East US",
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "catalogodigital-homolog.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "catalogodigital-homolog.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_homolog_plan2_externalid')]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "siteConfig": {},
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "hostNamesDisabled": false,
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "redundancyMode": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/web')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "nodeVersion": "12.13.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$CatalogoDigital-Homolog",
+                "azureStorageAccounts": {},
+                "scmType": "VSTSRM",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": true,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": true
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetName": "c7e07f4d-b105-450e-b37c-c0985cbe8e48_WebbAppDev2_New",
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "ftpsState": "AllAllowed",
+                "reservedInstanceCount": 0
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/2b74dd87afa44bda8ced7fe7829ad975')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"a5718c85c2ba1d5c66914f503955e6c89816cc60\",\"buildId\":\"1790\",\"releaseId\":\"1471\",\"buildNumber\":\"20201221.1\",\"releaseName\":\"Release-278\",\"repoProvider\":\"TfsGit\",\"repoName\":\"VendaFacil\",\"collectionUrl\":\"https://lmxsolution.visualstudio.com/\",\"teamProject\":\"6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"buildProjectUrl\":\"https://lmxsolution.visualstudio.com/6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"repositoryUrl\":\"\",\"branch\":\"develop\",\"teamProjectName\":\"VendaFacil\",\"slotName\":\"production\"}",
+                "start_time": "2020-12-21T13:21:40.3925855Z",
+                "end_time": "2020-12-21T13:21:41.0800989Z",
+                "active": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/3446cd22790e4b28be11d140a1d9ba1d')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"9df704e4b986e7750bffe6b5de9fb96a8d2aa170\",\"buildId\":\"1667\",\"releaseId\":\"1360\",\"buildNumber\":\"20201211.1\",\"releaseName\":\"Release-273\",\"repoProvider\":\"TfsGit\",\"repoName\":\"VendaFacil\",\"collectionUrl\":\"https://lmxsolution.visualstudio.com/\",\"teamProject\":\"6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"buildProjectUrl\":\"https://lmxsolution.visualstudio.com/6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"repositoryUrl\":\"\",\"branch\":\"develop\",\"teamProjectName\":\"VendaFacil\",\"slotName\":\"production\"}",
+                "start_time": "2020-12-11T13:36:33.4568843Z",
+                "end_time": "2020-12-11T13:36:33.9725047Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/5601b2b8bc694492a6659d4c3d7fdf8e')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"9df704e4b986e7750bffe6b5de9fb96a8d2aa170\",\"buildId\":\"1671\",\"releaseId\":\"1365\",\"buildNumber\":\"20201211.2\",\"releaseName\":\"Release-274\",\"repoProvider\":\"TfsGit\",\"repoName\":\"VendaFacil\",\"collectionUrl\":\"https://lmxsolution.visualstudio.com/\",\"teamProject\":\"6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"buildProjectUrl\":\"https://lmxsolution.visualstudio.com/6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"repositoryUrl\":\"\",\"branch\":\"develop\",\"teamProjectName\":\"VendaFacil\",\"slotName\":\"production\"}",
+                "start_time": "2020-12-11T19:31:41.0203382Z",
+                "end_time": "2020-12-11T19:31:41.6141357Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/670f225b09ac4d779e160f4b75c9f249')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"9df704e4b986e7750bffe6b5de9fb96a8d2aa170\",\"buildId\":\"1671\",\"releaseId\":\"1367\",\"buildNumber\":\"20201211.2\",\"releaseName\":\"Release-275\",\"repoProvider\":\"TfsGit\",\"repoName\":\"VendaFacil\",\"collectionUrl\":\"https://lmxsolution.visualstudio.com/\",\"teamProject\":\"6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"buildProjectUrl\":\"https://lmxsolution.visualstudio.com/6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"repositoryUrl\":\"\",\"branch\":\"develop\",\"teamProjectName\":\"VendaFacil\",\"slotName\":\"production\"}",
+                "start_time": "2020-12-11T20:05:20.111241Z",
+                "end_time": "2020-12-11T20:05:20.7196023Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/88775bd44d6a4727af8a7888e1122ad9')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"9df704e4b986e7750bffe6b5de9fb96a8d2aa170\",\"buildId\":\"1671\",\"releaseId\":\"1365\",\"buildNumber\":\"20201211.2\",\"releaseName\":\"Release-274\",\"repoProvider\":\"TfsGit\",\"repoName\":\"VendaFacil\",\"collectionUrl\":\"https://lmxsolution.visualstudio.com/\",\"teamProject\":\"6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"buildProjectUrl\":\"https://lmxsolution.visualstudio.com/6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"repositoryUrl\":\"\",\"branch\":\"develop\",\"teamProjectName\":\"VendaFacil\",\"slotName\":\"production\"}",
+                "start_time": "2020-12-11T19:26:22.997527Z",
+                "end_time": "2020-12-11T19:26:23.560036Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/d14ee74f431c4a6087e196c4439b6504')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"9df704e4b986e7750bffe6b5de9fb96a8d2aa170\",\"buildId\":\"1667\",\"releaseId\":\"1365\",\"buildNumber\":\"20201211.1\",\"releaseName\":\"Release-274\",\"repoProvider\":\"TfsGit\",\"repoName\":\"VendaFacil\",\"collectionUrl\":\"https://lmxsolution.visualstudio.com/\",\"teamProject\":\"6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"buildProjectUrl\":\"https://lmxsolution.visualstudio.com/6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"repositoryUrl\":\"\",\"branch\":\"develop\",\"teamProjectName\":\"VendaFacil\",\"slotName\":\"production\"}",
+                "start_time": "2020-12-11T19:22:09.8080152Z",
+                "end_time": "2020-12-11T19:22:10.2767635Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/d7fbefa086c94b46aa1fb732953cc2ab')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"9df704e4b986e7750bffe6b5de9fb96a8d2aa170\",\"buildId\":\"1671\",\"releaseId\":\"1370\",\"buildNumber\":\"20201211.2\",\"releaseName\":\"Release-276\",\"repoProvider\":\"TfsGit\",\"repoName\":\"VendaFacil\",\"collectionUrl\":\"https://lmxsolution.visualstudio.com/\",\"teamProject\":\"6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"buildProjectUrl\":\"https://lmxsolution.visualstudio.com/6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"repositoryUrl\":\"\",\"branch\":\"develop\",\"teamProjectName\":\"VendaFacil\",\"slotName\":\"production\"}",
+                "start_time": "2020-12-14T00:29:08.9399885Z",
+                "end_time": "2020-12-14T00:29:09.736881Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/ecd791aed6bc4a3f85ccda5fb3fb4df1')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"1300cf3172dfda166a80d7b299063362e0c7b753\",\"buildId\":\"1682\",\"releaseId\":\"1470\",\"buildNumber\":\"20201214.1\",\"releaseName\":\"Release-277\",\"repoProvider\":\"TfsGit\",\"repoName\":\"VendaFacil\",\"collectionUrl\":\"https://lmxsolution.visualstudio.com/\",\"teamProject\":\"6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"buildProjectUrl\":\"https://lmxsolution.visualstudio.com/6fa984a9-e3e8-4cd3-92f3-61ad5d148a58\",\"repositoryUrl\":\"\",\"branch\":\"develop\",\"teamProjectName\":\"VendaFacil\",\"slotName\":\"production\"}",
+                "start_time": "2020-12-21T13:17:26.9859727Z",
+                "end_time": "2020-12-21T13:17:27.5015999Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/', parameters('sites_CatalogoDigital_Homolog_name'), '.azurewebsites.net')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "siteName": "CatalogoDigital-Homolog",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/virtualNetworkConnections",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_CatalogoDigital_Homolog_name'), '/c7e07f4d-b105-450e-b37c-c0985cbe8e48_WebbAppDev2_New')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_CatalogoDigital_Homolog_name'))]"
+            ],
+            "properties": {
+                "vnetResourceId": "[concat(parameters('virtualNetworks_McxDEV_CIDR_externalid'), '/subnets/WebbAppDev2_New')]",
+                "isSwift": true
+            }
+        }
+    ]
+}
