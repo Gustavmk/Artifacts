@@ -1,0 +1,62 @@
+{
+    "mode": "all",
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Network/networkSecurityGroups/securityRules"
+          },
+          {
+            "allOf": [
+              {
+                "field": "Microsoft.Network/networkSecurityGroups/securityRules/access",
+                "equals": "Allow"
+              },
+              {
+                "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction",
+                "equals": "Inbound"
+              },
+              {
+                "anyOf": [
+                  {
+                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+                    "in": "[parameters('deniedPorts')]"
+                  },
+                  {
+                      "not": {
+                          "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRanges[*]",
+                          "notIn": "[parameters('deniedPorts')]"
+                      }
+                  }
+                ]
+              },
+              {
+                "anyOf": [
+                  {
+                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefix",
+                    "in": [
+                      "*",
+                      "Internet"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    },
+    "parameters": {
+      "deniedPorts": {
+        "type": "Array",
+        "metadata": {
+          "displayName": "Ports to block",
+          "description": "The inbound ports that should be blocked"
+        }
+      }
+    }
+  }
